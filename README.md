@@ -210,21 +210,22 @@ desc: Optional[str] = None,
     "useful for when you need to find relevant information in the news"  
     vector_index = read_index()  
   
-    condition=''  
-    if determination =="before":  
-        condition = "$lte"  
-    elif determination =="after":  
-        condition="$gte"  
-    elif determination == "equal":  
-        condition="$eq"  
+
   
     filter ={}  
     if category is not None:  
         filter["category"]= {"$eq": category.upper()}  
     if  authors is not None:  
         filter["authors"] = {"$eq": authors}  
-    if date is not None:  
-        filter["date"] = {condition:  datetime.fromisoformat(date)}  
+    if date is not None:
+        condition = '$eq'
+        if determination == "before":
+            condition = "$lte"
+        elif determination == "after":
+            condition = "$gte"
+        elif determination == "equal":
+            condition = "$eq"
+        filter["date"] = {condition:  datetime.fromisoformat(date)}
   
     return  format_docs(vector_index.similarity_search_with_score(k= 4,query=desc if desc else '', pre_filter = {'$and': [  
         filter ] }))
