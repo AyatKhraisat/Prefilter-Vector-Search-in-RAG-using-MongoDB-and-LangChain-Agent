@@ -141,11 +141,11 @@ There is no need in our case to split documents in our case. After that, you can
 
 We will start by reading the index that we already created so we can use to query our data.
 ```
-def read_index():  
-    DB_NAME= 'prefilter'  
-    return  MongoDBAtlasVectorSearch(  
-        client[DB_NAME]['prefilter'], embeddings, index_name='vector_index'  
+def read_index():
+    return  MongoDBAtlasVectorSearch(
+        client[DB_NAME][COLLECTION_NAME], embeddings, index_name=INDEX_NAME
     )
+
 ```
 
  We take a text search query, embed it, and perform some sort of “similarity” search to identify the stored splits with the most similar embeddings to our query embedding. The simplest similarity measure is cosine similarity — we measure the cosine of the angle between each pair of embeddings (which are high dimensional vectors).
